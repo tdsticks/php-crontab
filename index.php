@@ -248,6 +248,7 @@ class CronParser {
 				echo "<div>";
 					echo "<ul class='nav navbar-nav'>";
 						echo "<li class=''><a href='#'>Scheduled Crons</a></li>";
+						echo "<li class=''><a href='#'>( * denotes every)</a></li>";
 					echo "</ul>";
 				echo "</div>";
 			echo "</div>";
@@ -268,6 +269,7 @@ class CronParser {
 			echo "<table class='table table-bordered table-condensed'>";
 			echo "<thead>";
 				echo "<tr>";
+					echo "<th>"."Day of Month"."</th>";
 					echo "<th>"."Day of Week"."</th>";
 					echo "<th>"."Month"."</th>";
 					echo "<th>"."Time"."</th>";
@@ -346,6 +348,7 @@ class CronParser {
 				//
 
 				echo "<tr class='$table_class'>";
+					echo "<td>".$DayOfMonth."</td>";
 					echo "<td>".$dis_dow."</td>";
 					echo "<td>".$dis_mon."</td>";
 					echo "<td>".$dis_time."</td>";
