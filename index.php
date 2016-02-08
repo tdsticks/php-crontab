@@ -64,11 +64,15 @@ class CronParser {
 				//
 				// Check to see if the cron is commented out or not
 				//
+
+
+
 				$commented_out 				= FALSE;
-				if ( strpos( $raw_line, "#" ) == 0 ) {
+				if ( strpos( $raw_line, "#" ) === 0 ) {
 					$commented_out 			= TRUE;
 				}
-
+				//echo "commented_out: " . strpos( $raw_line, "#" ) . " " . $commented_out;
+				//echo "commented_out: " . $commented_out;
 
 
 				//
@@ -149,7 +153,8 @@ class CronParser {
 				}
 				//print_r($command); echo "<br>";
 
-
+				//echo "<br>";
+				//echo "<br>";
 
 				//
 				// Get the comments
@@ -172,11 +177,14 @@ class CronParser {
 				//
 				// Formulate the crontab array
 				//
-				$ct_ary[$project][] 		= array(
+				$project_ary 				= array(
 													"schedule" => $schedule,
 													"command" => $command,
 													"comment" => $comment
 				);
+				//print_r($project_ary); echo "<br>";
+
+				$ct_ary[$project][] 		= $project_ary;
 
 
 			} // End if stripos raw_line
@@ -194,6 +202,20 @@ class CronParser {
 	function display_crontab( $p_crontab )
 	{
 		//echo __METHOD__;
+
+		/*foreach ($p_crontab as $program => $p_data) {
+
+			//print_r($p_data); echo "<br/>";
+
+			foreach ($p_data as $d_key => $d_val) {
+
+				print_r($d_val); echo "<br/>";
+			}
+		}*/
+
+
+		//exit;
+
 
 		echo "<html>";
 			echo "<head>";
@@ -231,12 +253,12 @@ class CronParser {
 			echo "</div>";
 		echo "</nav>";
 
-		$dow_ary 							= ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-		$mon_ary  							= ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+		$dow_ary 							= array('Sun','Mon','Tue','Wed','Thu','Fri','Sat');
+		$mon_ary  							= array('Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec');
 
 		foreach ($p_crontab as $program => $p_data) {
 
-			//print_r($p_data);
+			//print_r($p_data); echo "<br/>";
 
 			echo "<h3>".ucwords($program)."</h3>";
 
@@ -247,6 +269,7 @@ class CronParser {
 			echo "<thead>";
 				echo "<tr>";
 					echo "<th>"."Day of Week"."</th>";
+					echo "<th>"."Month"."</th>";
 					echo "<th>"."Time"."</th>";
 					echo "<th>"."Command"."</th>";
 					echo "<th>"."Path"."</th>";
@@ -259,7 +282,7 @@ class CronParser {
 			echo "<tbody>";
 			foreach ($p_data as $d_key => $d_val) {
 
-				//print_r($d_val['schedule']); echo "<br/>";
+				//print_r($d_val['schedule']); //echo "<br/>";
 
 				$Minute 					= $d_val['schedule']['Minute'];
 				$Hour 						= $d_val['schedule']['Hour'];
@@ -270,6 +293,7 @@ class CronParser {
 
 				// Create the Day of Week string based on crontab
 				$dis_dow 					= $this->create_formatted_string($dow_ary, $DayOfWeek, 'Everyday');
+				$dis_mon 					= $this->create_formatted_string($mon_ary, $Month, 'Every month');
 
 
 				//
@@ -312,11 +336,18 @@ class CronParser {
 					$comment  				= $d_val['comment'];
 				}*/
 
-				$table_class 				= ($d_val['command']['enabled']) ? 'danger' : 'success';
-				//echo $d_val['command']['enabled'] . " " . $table_class;
+
+				//$table_class 				= ($d_val['command']['enabled']) ? 'danger' : 'success';
+				if ($d_val['command']['enabled'] != 1) {
+					$table_class 			= 'success';
+				} else {
+					$table_class 			= 'danger';
+				}
+				//
 
 				echo "<tr class='$table_class'>";
 					echo "<td>".$dis_dow."</td>";
+					echo "<td>".$dis_mon."</td>";
 					echo "<td>".$dis_time."</td>";
 					echo "<td>".$exec."</td>";
 					echo "<td>".$path."</td>";
