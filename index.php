@@ -255,7 +255,7 @@ class CronParser {
 		echo "</nav>";
 
 		$dow_ary 							= array('Sun','Mon','Tue','Wed','Thu','Fri','Sat');
-		$mon_ary  							= array('Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec');
+		$mon_ary  							= array('', 'Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec');
 
 		foreach ($p_crontab as $program => $p_data) {
 
@@ -295,7 +295,11 @@ class CronParser {
 
 				// Create the Day of Week string based on crontab
 				$dis_dow 					= $this->create_formatted_string($dow_ary, $DayOfWeek, 'Everyday');
+
 				$dis_mon 					= $this->create_formatted_string($mon_ary, $Month, 'Every month');
+				//print($Month); echo "<br>";
+				//$dis_mon = "";
+				//print($Month);
 
 
 				//
@@ -372,6 +376,9 @@ class CronParser {
 
 
 	function create_formatted_string ( $date_ary, $date_val, $catch_all_str ) {
+		//print_r($date_ary);
+		//print_r($date_val); echo "<br>";
+
 		//
 		// Create the Day of Week based on crontab
 		//
@@ -382,7 +389,7 @@ class CronParser {
 
 		} else if ( strpos($date_val, ',') !== False ) {
 			$explode_comma 			= explode(",", $date_val);
-			//print_r($explode_comma);
+			#print_r($explode_comma);
 
 			foreach ($explode_comma as $comma) {
 				//echo $comma;
@@ -394,6 +401,7 @@ class CronParser {
 						$dis_str 	.= $date_ary[ $dash ] . ",";
 					}
 				} else {
+					//print_r($date_ary); echo "<br/>";
 					//echo $comma; echo "<br/>";
 					$dis_str 		.= $date_ary[ $comma ] . ",";
 				}
@@ -403,6 +411,8 @@ class CronParser {
 			$dis_str 				= $date_ary[ $date_val ];
 		}
 		$dis_str = rtrim($dis_str, ",");
+
+		//print_r($date_ary);
 
 		return $dis_str;
 	}
